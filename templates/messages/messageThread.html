@@ -1,0 +1,35 @@
+<ion-view view-title="Message">
+<ion-nav-buttons side="right">
+	<button class="button button-icon button-clear ion-refresh" ng-click="getMessageThread()"></button>
+</ion-nav-buttons>
+<ion-content>
+	<div class="message-thread-view">
+		<ion-list class="message-thread">
+			<ion-item ng-repeat="message in messageList" class="list animate-fade-slide-in-right" ng-class="{true: 'comment-left', false: 'comment-right'}[message.user.id == currentUserId]" >
+				<img
+				ng-src="{{ImageService.getImageByType(message.user.profileImage, 'listing')}}"  class="chat-profile-pic" ng-class="{true: 'left', false: 'right'}[message.user.id == currentUserId]">
+				<div class="chat-bubble" ng-class="{true: 'left', false: 'right'}[message.user.id == currentUserId]">
+					<h3><a href="#/app/profile/{{message.user.id}}">{{message.user.firstName}}</a></h3>
+					<i class="message-time" am-time-ago="message.createdAt"></i>
+					<div class="comment-message">
+						<span> {{message.message}}</span>
+					</div>
+				</div>			
+			</ion-item>
+		</ion-list>
+		<div class="card" ng-show="showMessage">
+			<div class="item">No messages in this thread.</div>
+		</div>
+	</div>
+</ion-content>
+<ion-footer-bar align-title="center" keyboard-attach class="bar footer-controls">
+	<div class="row" style="padding:1px">
+		<div class="col col-80">
+			<input type="text" ng-model="newcomment.message" placeholder="Post a comment"> 
+		</div>
+		<div class="col">
+			<button class="order-details-send-message-btn" ng-click="postMessage()"> Send</button>
+		</div>
+	</div>
+</ion-footer-bar>
+</ion-view>

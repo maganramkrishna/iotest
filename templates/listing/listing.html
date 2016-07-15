@@ -1,0 +1,246 @@
+<ion-view view-title="{{listing.name}}" can-swipe-back="false">
+    <ion-nav-buttons side="right">
+      <button type="button" class="button button-icon button-clear ion-android-share-alt" ng-click="shareNative()"></button>
+    </ion-nav-buttons>
+  <ion-content class="listing">
+      <ion-refresher
+      pulling-text="Pull to refresh..."
+      on-refresh="refresh()">
+    </ion-refresher>
+      <div class="image-gallery">
+          <image-slider images="listingImages" isowner="isOwner" delete-fn="deleteImage(name, index)"></image-slider>
+
+          <div class="listing-control-badge">
+              <favorites favid="{{isFavorite ? listingFavorite.id : ''}}" listid="{{listing.id}}" />
+          </div>
+      </div>
+      <div class="list bar-bg-2" style="font-size: 11px">
+        <div class="row">
+          <div class="col col-50">
+            <div class="circle-container-small" ng-show="listingUser.address.length > 0"><i class="ion-ios-location"></i></div> {{listingUser.address[0].city}}, {{listingUser.address[0].state}}
+          </div>
+          <div class="col col-33" ng-if="listing.startDate"><span countdown date="{{listing.endDate}}"></span></div>
+          <div class="col">
+            <span class="ion-chatbox pull-right" ui-sref="app.messages"> Chat</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="list center purchase-controls">
+        <span class="listing-spam" ng-click="showConfirmReport()"><i class="ion-flag"></i> Report </span>
+        <div class="purchase-price" ng-hide="listing.endDate" ><strong> Price {{listing.price | currency : $ : 2}}</strong></div>
+        <div class="purchase-price" ng-show="listing.endDate" >
+          <strong> Current Bid {{maxBid | currency : $ : 2}}</strong> <br>
+          <small> Starting price: {{listing.price | currency: $: 2}}</small>
+        </div>
+      </div>
+      <div class="listing-info-container">
+        <div class="list listing-owner">
+          Seller: <span ui-sref="app.profile({userId: listing.user.id})" class="theme-color">{{listing.user.firstName}} {{listing.user.lastName}}</span>, <small>Since {{listing.user.createdAt | date: 'MMM d, y'}}</small>  
+        </div>        
+        <div class="card">
+          <div class="item item-text-wrap listing-info">
+            <div class="title">
+              <strong>Item Title: </strong> <span class="theme-color">{{listing.name}}</span>
+            </div>
+            <div class="condition">
+              <strong>Item Condition: </strong> <span class="theme-color">{{listing.condition.name || 'new'}}</span>
+            </div>
+            <div class="cateogry" ng-if="listing.category">
+                <strong> Category: </strong>
+                <span>{{listing.category.name}}</span>
+                <a href="#/app/listing/category/{{listing.category.id}}"><i class="theme-color"> View more in this category</i></a>
+            </div>
+            <div class="posted-date">
+                <strong> Item posted on: </strong>
+                <span>{{listing.createdAt | date: 'medium'}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-text-wrap">
+            <ion-list>
+            <ion-item class="item-default"
+            ng-click="toggleGroup('description')"
+            ng-class="{active: isGroupShown('description')}">
+            <i class="icon ion-ios-compose"></i>
+            &nbsp;
+            Description
+            <i class="icon pull-right" ng-class="isGroupShown('description') ? 'ion-chevron-up': 'ion-chevron-down'"></i>
+            </ion-item>
+            <ion-item class="item-accordion light-bg"
+            ng-show="isGroupShown('description')">
+            <div class="description">
+              {{listing.description}}
+            </div>
+            </ion-item>
+            </ion-list>
+          </div>
+        </div>
+        <div class="card comment">
+            <div class="item">
+                <strong>Comments ({{comments.length}})</strong><hr>
+            </div>
+            <ion-list show-delete="false" can-swipe="true"  ng-show="comments.length > 0">
+                    <div class="card list comment-list-item" item="comment" ng-repeat="comment in comments | filter: filterParent">
+
+                          <div class="item-text-wrap waves-effect waves-block waves-dark">
+
+                              <ion-item id="{{comment.id}}">
+                                  <strong><a href="#/app/profile/{{comment.user.id}}">{{comment.user.firstName}}</a>: </strong> {{comment.message}}
+
+                                  <div class="card-footer text-right">
+                                      <i class="icon ion-chatboxes positive"></i> {{(comments | filter:{parentId: comment.id}).length}}
+                                      <!-- <i class="icon ion-heart assertive"></i> 23 -->
+                                      <span ng-show="isOwner" ng-click="postComment(comment.id)" class="icon ion-reply positive reply-text">
+                                           reply
+                                      </span>
+                                      <div class="pull-left">
+                                          <i class="icon ion-clock comment-date"> {{comment.createdAt | date: 'medium'}}</i>
+                                      </div>
+                                  </div>
+                                  <hr>
+                                  <div ng-class="{true: 'pull-left comment-left', false: 'pull-right comment-right'}[reply.user.id == comment.user.id]"
+                                      class="comment-line"
+                                      ng-repeat="reply in (comments | filter:{parentId: comment.id})">
+                                      <strong><a href="#/app/profile/{{reply.user.id}}">{{reply.user.firstName}}</a>: </strong> {{reply.message}}
+                                      <div class="text-right comment-date"> {{reply.createdAt | date: 'medium'}}</div>
+                                  </div>
+                                  <ion-option-button class="button-assertive icon ion-trash-a" ng-show="isOwner" ng-click="deleteComment(comment)"></ion-option-button>
+
+                                  <span ng-show="comment.user.id == currentUserId"
+                                  ng-click="postComment(comment.id)" class="icon ion-reply positive reply-text">
+                                       reply
+                                  </span>
+                              </ion-item>
+
+                          </div>
+                    </div>
+              </ion-list>
+              <div class="card" ng-show="!comments || comments.length === 0">
+                <div class="item">No Comments yet</div>
+              </div>
+            <button type="button" class="button button-full button-positive" name="button" ng-hide="isOwner" ng-click="postComment()">Post comment</button>
+        </div>
+      </div>
+  </ion-content>
+  <ion-footer-bar ng-hide="isOwner" align-title="center">
+    <div class="title theme-background" ng-show="listing.endDate" ng-click="bid()">PLACE BID</div>
+    <div class="title theme-background" ng-hide="listing.endDate" ng-click="checkout()">BUY NOW</div>
+  </ion-footer-bar>
+</ion-view>
+
+<script id="post.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Comment on {{listing.name}}</h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-item class="item-borderless hide-on-keyboard-open">
+              &nbsp;
+      </ion-item>
+      <p class="item-input item-stacked-label" style="white-space: normal;">Your comment will be visible to everyone.</p>
+      <textarea col="50" id="comment" placeholder="What would you like to ask the seller?" ng-model="newcomment.message" maxlength="200" style="height: 200px; width: 100%; padding: 20px;"></textarea>
+      <div class="button-bar">
+      <button class="button button-outline button-dedfault" ng-click="cancelPost()">
+        CANCEL
+      </button>
+      <button class="button button-positive" ng-click="confirmPost()">
+        POST
+      </button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+<script id="checkout.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Checkout</h1>
+    </ion-header-bar>
+    <ion-content class="checkout" overflow-scroll="false">
+    <ion-item class="item-borderless hide-on-keyboard-open">
+            
+    </ion-item>
+
+      <div class="checkout-container item">
+        <div class="list">
+          <div style="text-align: center;" class="hide-on-keyboard-open">
+            <img style="width: 150px;" ng-src="{{ImageService.getImageByType(listingImages.length > 0 ? listingImages[0].imageKey: '', 'listing')}}" alt="">
+          </div>
+          <p class="item-input item-stacked-label" style="white-space: normal;">Are you ready to make <strong>"{{listing.name}}"</strong> yours? </p> <br>
+
+          <label class="item item-input item-stacked-label"><span class="input-label">Payment method</span></label>
+          <label class="item item-input item-select item-stacked-label">
+            <select style="width: 95%; max-width: none;" ng-model="cardId" ng-options="card.id as card.brand + ' - X ' + card.last4 for card in paymentMethods.ExtCards.data" ng-change="selectPaymentMethod(cardId)" ng-show="paymentMethods.ExtCards.data.length > 0">
+            <option value="">Select</option>
+            </select>
+            <input type="hidden" ng-model="customerId" value="card.customer">
+          </label>
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Order Notes:</span> <br><br>
+            <textarea rows="5" ng-model="notes" placeholder="Anything you want to say to the seller?"></textarea>
+          </label>
+        </div>
+      </div>
+      <div class="button-bar">
+      <button class="button button-outline button-dedfault" ng-click="cancelCheckout()">
+        CANCEL
+      </button>
+      <button class="button button-positive" ng-click="confirmOrder()">
+        PLACE ORDER
+      </button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+<script id="bid.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Place your bid</h1>
+    </ion-header-bar>
+    <ion-content class="checkout" overflow-scroll="false">
+      <ion-item class="item-borderless hide-on-keyboard-open">
+              &nbsp;
+      </ion-item>
+
+      <div class="checkout-container item">
+        <div class="list">
+          <label class="item-input">
+            <span class="input-label" style="font-size: 20px;">Your bid</span>
+            <input type="number" pattern="[0-9]*" ng-model="bid.new" id="newBid" placeholder="{{maxBid + 1}} and above">
+          </label>
+
+          <label class="item-input">
+            <span class="input-label">Current Bid</span>
+            {{maxBid | currency : $ :2 }}
+          </label>
+          <label class="item-input">
+             <span class="input-label">Starting Price</span>
+              {{listing.price | currency : $ :2 }}
+          </label>
+          <label class="item-input">
+            <span class="input-label">Time Left</span>
+            <div ng-if="listing.startDate">
+              <span countdown date="{{listing.endDate}}"></span>
+            </div>
+          </label>
+          <label class="item-input">
+            <span class="input-label">Total bids</span>
+            {{bidders.length}}
+          </label>
+        </div>
+      </div>
+       <div class="button-bar">
+          <button class="button button-outline button-dedfault" ng-click="cancelBid()">
+            CANCEL
+          </button>
+          <button class="button button-positive" ng-click="placeBid()">
+            PLACE BID
+          </button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>

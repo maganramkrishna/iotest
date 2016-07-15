@@ -1,0 +1,50 @@
+<ion-view view-title="{{currentUser.firstName}}'s Profile" >
+    <ion-content class="">
+        <div class="list">
+            <div class="row profile-info">
+                <div class="col col-33">
+                    <div class="content profile-container" ng-click="showImageOptions()">
+                        <img ng-hide="currentUser.facebookId > 0" alt="{{currentUser.username}}" ng-src="{{ImageService.getImageByType(currentUser.profileImage, 'profile')}}"/>
+                        <!-- <img class="fb-profile-pic" ng-show="currentUser.facebookId > 0" alt="{{currentUser.username}}" ng-src="{{currentUser.profileImage}}"/> -->
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 10px; margin-left: 5px;">
+                    <div><h5>{{currentUser.firstName}}</h5></div>
+                    <div> <i class="ion-android-mail"></i> {{currentUser.email}}</div>
+                    <div> <i class="ion-ios-location"></i> {{currentUser.address && currentUser.address.length > 0 ? currentUser.address[0].city + ', ' + currentUser.address[0].state  : ''}} </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+			<div class="profile-form">
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">First Name</span>
+					<input type="text" ng-model="currentUser.firstName" value="{{currentUser.firstName}}">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Last Name</span>
+					<input type="text" ng-model="currentUser.lastName" value="{{currentUser.lastName}}">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Email</span>
+					<input type="email" ng-model="currentUser.email" value="{{currentUser.email}}">
+				</label>
+				<label class="item item-input item-stacked-label">
+					<span class="input-label">Phone <span ng-class="{true:'ion-ios-checkmark ion-ios-checkmark-green', false:'ion-alert-circled'}[currentUser.phoneVerified]"></span>
+					<small>(eg. 15555555555)</small></span><input type="tel" ng-model="currentUser.phonenumber" value="{{currentUser.phonenumber}}">
+				</label>
+			</div>
+			<button class="button button-block button-positive" ng-click="updateUser()">
+			  Save
+			</button>
+        </div>
+        <ion-list>
+          <ion-item ng-show="currentUser">
+            <div style="text-align: center;" class="icon ion-log-out" ng-click="logout()"> Logout</div><br>
+            <small class="title" style="display: block; text-align: center; font-size: 12px">&copy;hotspot Version <app-version></app-version></small>  
+          </ion-item>
+        </ion-list>
+    </ion-content>
+    <footer-menu></footer-menu>
+</ion-view>
+    

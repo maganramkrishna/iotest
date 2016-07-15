@@ -1,0 +1,91 @@
+	<ion-view view-title="Orders #{{orderDetails.order.id}}">
+	<ion-nav-buttons side="right">
+		<button class="button button-icon button-clear ion-refresh" ng-click="getOrderDetails()"></button>
+	</ion-nav-buttons>
+  <ion-content class="order-details">
+  	<div class="card">
+	    <div class="row">
+	     	<div class="col col-33">
+	      		<img ng-if="orderDetails.order.soldListing.listingimages[0].type === 'image'" ng-src="{{ImageService.getImageByType(orderDetails.order.soldListing.listingimages.length > 0 ? orderDetails.order.soldListing.listingimages[0].imageKey : '', 'order-details')}}" alt="">
+
+	      		<img ng-if="orderDetails.order.soldListing.listingimages[0].type === 'video'" ng-src="{{ImageService.getImageByType(orderDetails.order.soldListing.listingimages.length > 0 ? orderDetails.order.soldListing.listingimages[0].imageKey : '', 'listing-wide-video')}}" alt="">
+	      	</div>
+	    	<div class="col">
+	      		<div class="order-details">
+                  <span ng-if="orderDetails.order.seller.id === currentUser.id">
+                  	<strong class="theme-color">Bought by:</strong> <a href="#/app/profile/{{orderDetails.order.seller.id}}">{{orderDetails.order.buyer.firstName}} {{orderDetails.order.buyer.lastName}} </a><br>
+                  </span>
+                  <span ng-if="orderDetails.order.seller.id != currentUser.id">
+                  	<strong class="theme-color">Sold by:</strong> <a href="#/app/profile/{{orderDetails.order.seller.id}}">{{orderDetails.order.seller.firstName}} {{orderDetails.order.seller.lastName}} </a><br>
+                  </span>
+                  <strong class="theme-color">Item:</strong> {{orderDetails.order.name}} <br>
+                  <span ng-show="orderDetails.order.notes"><strong class="theme-color">Notes:</strong> {{orderDetails.order.notes}} <br></span>
+                  <strong class="theme-color">Status:</strong> {{orderDetails.order.status}} <br>       
+                  <strong class="theme-color">Price:</strong> {{orderDetails.order.price | currency : $ : 2}}
+              </div>
+	      	</div>
+	    </div>
+      	<div class="row">
+        	<strong class="theme-color">Description: &nbsp;</strong> {{orderDetails.order.description}} <br>
+      	</div>
+
+    </div>
+    <div class="card" ng-if="orderDetails.order.status ==='requested' && orderDetails.order.secretcode && orderDetails.order.seller.id !== currentUser.id">
+  		<div class="item item-text-wrap order-next">
+		  <h3 class="title">What next ? <i ng-click="showNextBuyerHelp()" class="ion-help-circled"></i></h5>
+  			Here is your purchase code <b>{{orderDetails.order.secretcode}}</b> to present to the seller for payment during item exchange.
+  		</div>
+  	</div>
+  	<div class="card" ng-if="orderDetails.order.status ==='requested' && orderDetails.order.secretcode && orderDetails.order.seller.id === currentUser.id">
+  		<div class="item item-text-wrap order-next">
+		  <h3 class="title">What next ? <i ng-click="showNextSellerHelp()" class="ion-help-circled"></i></h5>
+  			Enter the order fullfilment code here. You will receive this code from the buyer.
+  			
+  			<label class="item item-input item-select">
+			    <div class="input">
+			      <input type="text" name="" placeholder="Enter code here">
+			    </div>
+			    <select ng-model="orderaction" ng-change="showSelectValue(mySelect)">
+			      <option ng-repeat="action in actions track by action.id" ng-selected="action.id === 'action'"  ng-value="action.id">{{action.label}}</option>
+			    </select>
+		  	</label>
+		  	<button class="button button-stable button-full" ng-click="orderAction()">Complete order</button>
+  		</div>
+  	</div>
+    <div class="item item-divider">
+	    Private Chats
+	</div>
+	<div class="card" ng-show="orderDetails.chats.length === 0">
+    	<div class="item">Start chatting to complete this order.</div>
+  	</div>
+    <div class="message-thread-view">
+    	<ion-list class="message-thread">
+			<ion-item ng-repeat="message in orderDetails.chats" class="list animate-fade-slide-in-right" ng-class="{true: 'comment-left', false: 'comment-right'}[message.user.id == currentUser.id]" >
+		        <img
+		        ng-src="{{ImageService.getImageByType(message.user.profileImage, 'listing')}}" class="chat-profile-pic" ng-class="{true: 'left', false: 'right'}[message.user.id == currentUser.id]">
+				<div class="chat-bubble" ng-class="{true: 'left', false: 'right'}[message.user.id == currentUser.id]">
+			       	<h3><a href="#/app/profile/{{message.user.id}}">{{message.user.firstName}} </a></h3>			       
+			        <i class="message-time" am-time-ago="message.createdAt"></i>
+	 		        <div class="comment-message">
+				        <span> {{message.message}}</span> 
+	              	</div>
+              	</div>          	
+			    
+			</ion-item>
+		</ion-list>
+		<div class="card" ng-show="showMessage">
+	    	<div class="item">No messages in this thread.</div>
+	  	</div>
+    </div>
+  </ion-content>
+   <ion-footer-bar keyboard-attach align-title="center" class="bar footer-controls">
+	<div class="row" style="padding:1px">
+		<div class="col col-80">
+			<input type="text" ng-model="postMessage" placeholder="Send private message to seller"> 
+		</div>	
+		<div class="col">
+			<button class="order-details-send-message-btn" ng-click="postPrivateMessage()"> Send</button>
+		</div>
+	</div>
+  </ion-footer-bar>
+</ion-view>

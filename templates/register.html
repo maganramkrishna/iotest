@@ -1,0 +1,132 @@
+<ion-view hide-nav-bar="false" title="Sign Up">
+  <ion-content class="register bg-light">
+    <form ng-submit="doRegister(registerForm)" name="registerForm" class="register-form" novalidate="true">
+        <img src="https://res.cloudinary.com/hotspot-online/image/upload/v1443903623/assets/logo-color.png" alt="Hot Spot" class="register-logo" />
+        <div class="list" style="margin-top: 20px;">
+            <!-- First Name -->
+
+            <div class="error-container" ng-show="registerForm.firstName.$error && registerForm.$submitted" ng-messages="registerForm.firstName.$error">
+              <div ng-messages="registerForm.firstName.$error">
+                  <div class="error" ng-message="required">
+                    First name is required!
+                  </div>
+                  <div class="error" ng-message="minlength">
+                    Minimum length of this field is 3 characters!
+                  </div>
+                  <div class="error" ng-message="maxlength">
+                    Maximum length of this field is 20 characters!
+                  </div>
+              </div>
+            </div>
+            <div class="round-input">
+              <span class="ion-ios-person"></span>
+              <input type="text" ng-class="{ 'has-errors' : registerForm.firstName.$invalid && registerForm.$submitted, 'no-errors' : registerForm.firstName.$valid}" placeholder="First Name" ng-model="registerData.firstName" ng-minlength="3" ng-maxlength="20" highlight-color="balanced" ng-required="true" type="text" name="firstName"/>
+            </div>
+
+            <!-- Last Name -->
+
+            <div class="error-container" ng-show="registerForm.lastName.$error && registerForm.$submitted" ng-messages="registerForm.lastName.$error">
+                <div ng-messages="registerForm.lastName.$error">
+                    <div class="error" ng-message="required">
+                      Last name is required!
+                    </div>
+                    <div class="error" ng-message="minlength">
+                      Minimum length of this field is 4 characters!
+                    </div>
+                    <div class="error" ng-message="maxlength">
+                      Maximum length of this field is 20 characters!
+                    </div>
+                </div>
+            </div>
+            <div class="round-input">
+              <span class="ion-ios-people"></span>
+              <input type="text" g-class="{ 'has-errors' : registerForm.lastName.$invalid && registerForm.$submitted, 'no-errors' : registerForm.lastName.$valid}" placeholder="Last Name" ng-model="registerData.lastName" ng-minlength="4" ng-maxlength="20" highlight-color="balanced" ng-required="true"  type="text" name="lastName"/>
+            </div>
+
+            <!-- User name  -->
+            <div class="error-container" ng-show="registerForm.username.$error && registerForm.$submitted" ng-messages="registerForm.username.$error">
+                <div ng-messages="registerForm.username.$error">
+                    <div class="error" ng-message="required">
+                      Username is required!
+                    </div>
+                    <div class="error" ng-message="minlength">
+                      Minimum length of this field is 4 characters!
+                    </div>
+                    <div class="error" ng-message="maxlength">
+                      Maximum length of this field is 20 characters!
+                    </div>
+                </div>
+            </div>
+            <div class="round-input">
+              <span class="ion-person"></span>
+              <input type="text" ng-class="{ 'has-errors' : registerForm.username.$invalid && registerForm.$submitted, 'no-errors' : registerForm.username.$valid}" placeholder="Username" ng-model="registerData.username" highlight-color="energized" ng-minlength="4" ng-maxlength="20" ng-required="true" type="text" name="username"/>
+            </div>
+
+            <!-- Password -->
+
+            <div class="error-container" ng-show="registerForm.password.$error && registerForm.$submitted" ng-messages="registerForm.password.$error">
+                <div ng-messages="registerForm.password.$error">
+                    <div class="error" ng-message="required">
+                      Password is required!
+                    </div>
+                    <div class="error" ng-message="minlength">
+                      Minimum length of this field is 8 characters!
+                    </div>
+                    <div class="error" ng-message="maxlength">
+                      Maximum length of this field is 20 characters!
+                    </div>
+                    <div class="error" ng-message="pattern">
+                      Password must contain alphanumeric [a-z] and [0-9]
+                    </div>
+                </div>
+            </div>
+            <div class="round-input">
+              <span class="ion-locked"></span>
+              <input type="password" ng-class="{ 'has-errors' : registerForm.password.$invalid && registerForm.$submitted, 'no-errors' : registerForm.password.$valid}" placeholder="Password" ng-model="registerData.password" highlight-color="energized" ng-minlength="8" ng-maxlength="20" ng-required="true" type="password" ng-pattern="/^[0-9A-Z]+[0-9]*[0-9A-Z]$/i" name="password"/>
+              
+            </div>
+
+            <!-- Email -->
+            <div class="error-container" ng-show="registerForm.email.$error && registerForm.$submitted" ng-messages="registerForm.email.$error">
+                <div ng-messages="registerForm.email.$error">
+                    <div class="error" ng-message="required">
+                      Email is required!
+                    </div>
+                    <div class="error" ng-message="minlength">
+                      Minimum length of this field is 5 characters!
+                    </div>
+                    <div class="error" ng-message="maxlength">
+                      Maximum length of this field is 50 characters!
+                    </div>
+                </div>
+            </div>
+			      <div class="round-input">
+              <span class="ion-email"></span>
+              <input type="email" ng-class="{ 'has-errors' : registerForm.email.$invalid && registerForm.$submitted, 'no-errors' : registerForm.email.$valid}" placeholder="Email" ng-model="registerData.email" highlight-color="energized"  ng-minlength="5" ng-maxlength="50" ng-required="true"  type="email" name="email"/>
+              
+            </div>
+            
+            <!-- Agreement -->
+            <div class="error-container" ng-show="registerForm.agreement.$error && registerForm.$submitted" ng-messages="registerForm.agreement.$error">
+                <div ng-messages="registerForm.agreement.$error">
+                    <div class="error" ng-message="required">
+                      Please check mark to agree to to policies
+                    </div>
+                </div>
+            </div>
+            <div class="register-agreement">                          
+              <ion-checkbox ng-class="{ 'has-errors' : registerForm.agreement.$invalid && registerForm.$submitted, 'no-errors' : registerForm.agreement.$valid}"  ng-model="registerData.agreement" highlight-color="energized" ng-click="toggleAgreement()" ng-required="true" name="agreement">I Agree to the <a href="#/app/eula"> User Agreement policies</a> <br> for hotpsot.</ion-checkbox>
+              read user agreement <a href="#/app/eula"> here</a> 
+            </div>
+
+            <br>
+            <label class="">
+              <button class="button button-block button-stable" type="submit">Sign up</button><br>
+            </label>
+            <a ng-click="goToLogin()" class="anchor-small anchor-light" name="cancel">Already have an account?</a>
+			       <a ng-click="goBack()" class="anchor-light" name="cancel">Cancel</a>
+            
+        </div>
+    </form>
+  </ion-content>
+</ion-view>

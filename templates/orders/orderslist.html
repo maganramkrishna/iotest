@@ -1,0 +1,85 @@
+<ion-view view-title="Orders">
+  <ion-content class="orders">
+    <ul class="nav tab-nav">
+      <li ng-click="selection='placed'" ng-class="{active: selection == 'placed'}"> <i class="ion-checkmark-circled"></i> Bought</li>
+      <li ng-click="selection='request'" ng-class="{active: selection == 'request'}"><div class="sold-badge">Sold</div></li>
+    </ul>
+
+    <div class="cc tab-container" ng-show="selection == 'placed'">
+      <div class="card" ng-show="!sellerOrders || sellerOrders.length === 0">
+        <div class="item">No orders yet</div>
+      </div>
+    	<div class="card" ng-repeat="order in sellerOrders">
+        <div class="item item-text-wrap">
+          <ion-list>
+            <div class="item-default"
+            ng-click="toggleGroup(order.id)"
+            ng-class="{active: isGroupShown(order.id)}">
+              <i class="ion-ios-calendar-outline"></i> Order #{{order.id}} - <span am-time-ago="order.createdAt"></span>
+              <i class="icon pull-right" ng-class="isGroupShown(order.id) ? 'ion-chevron-up': 'ion-chevron-down'"></i>
+              <span class="pull-right" style="margin-right: 5px">{{order.price | currency : $ : 2}}</span>
+            </div>
+            <ion-item class="item-accordion light-bg" ng-show="isGroupShown(order.id)">
+              <div class="order-details" ng-show="oDetail">
+                  <div class="row">
+                    <div class="col col-33">
+                        <img ng-if="oDetail.order.soldListing.listingimages[0].type ==='image'" ng-src="{{ImageService.getImageByType(oDetail.order.soldListing.listingimages.length > 0 ? oDetail.order.soldListing.listingimages[0].imageKey : '', 'order-details')}}" alt="">
+
+                        <img ng-if="oDetail.order.soldListing.listingimages[0].type ==='video'" ng-src="{{ImageService.getImageByType(oDetail.order.soldListing.listingimages.length > 0 ? oDetail.order.soldListing.listingimages[0].imageKey : '', 'listing-wide-video', 'video')}}" alt="">
+                      </div>
+                    <div class="col">
+                        <div class="order-details">
+                              <strong class="theme-color">Sold by:</strong> <a href="#/app/profile/{{oDetail.order.seller.id}}">{{oDetail.order.seller.firstName}} {{oDetail.order.seller.lastName}} </a><br>
+                              <strong class="theme-color">Item:</strong> {{oDetail.order.name}} <br>
+                              <span ng-show="oDetail.order.notes"><strong class="theme-color">Notes:</strong> {{oDetail.order.notes}} <br></span>
+                              <strong class="theme-color">Status:</strong> {{oDetail.order.status}} <br>       
+                              <strong class="theme-color">Price:</strong> {{oDetail.order.price | currency : $ : 2}}
+                          </div>
+                      </div>
+                  </div>               
+              </div>
+              <a href="#/app/orderDetails/{{order.id}}">View Details</a>
+            </ion-item>
+          </ion-list>
+        </div>
+    	</div>
+    </div>
+    <div class="cc tab-container" ng-show="selection == 'request'">
+    	<div class="card" ng-show="!buyerOrders || buyerOrders.length === 0">
+        <div class="item">No orders yet</div>
+      </div>
+      <div class="card" ng-repeat="order in buyerOrders">
+        <div class="item item-text-wrap">
+          <ion-list>
+            <div class="item-default"
+            ng-click="toggleGroup(order.id)"
+            ng-class="{active: isGroupShown(order.id)}">
+              <i class="ion-ios-calendar-outline"></i> <span am-time-ago="order.createdAt"></span>
+              <i class="icon pull-right" ng-class="isGroupShown(order.id) ? 'ion-chevron-up': 'ion-chevron-down'"></i>
+              <span class="pull-right" style="margin-right: 5px">{{order.price | currency : $ : 2}}</span>
+            </div>
+            <ion-item class="item-accordion light-bg" ng-show="isGroupShown(order.id)">
+              <div class="order-details" ng-show="oDetail">
+                  <div class="row">
+                    <div class="col col-33">
+                        <img ng-src="{{ImageService.getImageByType(oDetail.order.soldListing.listingimages.length > 0 ? oDetail.order.soldListing.listingimages[0].imageKey : '', 'order-details')}}" alt="">
+                      </div>
+                    <div class="col">
+                        <div class="order-details">
+                              <strong class="theme-color">Bought by:</strong> <a href="#/app/profile/{{oDetail.order.buyer.id}}">{{oDetail.order.buyer.firstName}} {{oDetail.order.buyer.lastName}} </a><br>
+                              <strong class="theme-color">Item:</strong> {{oDetail.order.name}} <br>
+                              <span ng-show="order.notes"><strong class="theme-color">Notes:</strong> {{oDetail.order.notes}} <br></span>
+                              <strong class="theme-color">Status:</strong> {{oDetail.order.status}} <br>       
+                              <strong class="theme-color">Price:</strong> {{oDetail.order.price | currency : $ : 2}}
+                          </div>
+                      </div>
+                  </div>
+              </div>
+              <a href="#/app/orderDetails/{{order.id}}">View Details</a>
+            </ion-item>
+          </ion-list>
+        </div>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

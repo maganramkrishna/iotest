@@ -1,0 +1,22 @@
+<ion-view view-title="Message">
+  <ion-content>
+  	<ion-list>
+		<ion-item ng-repeat="message in messageList" class="list animate-fade-slide-in-right">
+			<a href="#/app/listing/{{message.listing.id}}" class="item item-avatar waves-effect waves-button waves-dark in done" style="transition-delay: 0.51s; min-height: 65px;">
+		        <img style="max-width: 65px; max-height: 65px; margin-right: 5px;" 
+		        ng-src="{{ImageService.getImageByType(message.listing.images && message.listing.images.length > 0 ? message.listing.images[0].imageKey : '', 'listing')}}">
+				
+				<div>
+			        <h2>{{message.listing.name}}</h2>
+			        <div>
+				        <i class="icon ion-chatbubble"> {{message.message}}</i> <br>
+				         
+		              <i class="ion-clock"></i>
+		              <small><b>{{(message.createdAt | date : 'medium') }}</b></small>
+	              	</div>
+              	</div>
+		    </a>
+		</ion-item>
+	</ion-list>
+  </ion-content>
+</ion-view>

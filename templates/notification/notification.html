@@ -1,0 +1,57 @@
+<ion-view title="Notifications">
+ <ion-content class="notifications">
+ 	<ion-refresher
+    pulling-text="Pull to refresh..."
+    on-refresh="doRefresh()">
+  	</ion-refresher>
+	<ion-list>
+		 <ion-item ng-repeat="notification in notifications" class="notification-item" ng-switch on="notification.type" ng-class="{'unread': !notification.read}">
+		 	<a ng-switch-when="listing" ng-show="notification.fromUser" class="item item-avatar" style="padding-left: 68px;" href="#/app/listing/{{notification.referenceId}}">
+ 				<img ng-src="{{ImageService.getImageByType(notification.fromUser.profileImage, 'profile')}}" alt="{{notification.fromUser.firstName}}">
+
+ 				<div style="white-space: initial;">
+ 					{{notification.message}}
+				 	<span class="item-note">
+					  <span am-time-ago="notification.createdAt"></span>
+					</span>
+				</div>
+ 			</a>
+ 			<a ng-switch-when="order" ng-show="notification.fromUser" class="item item-avatar" style="padding-left: 68px;" href="#/app/orderDetails/{{notification.referenceId}}">
+ 				<img ng-src="{{ImageService.getImageByType(notification.fromUser.profileImage, 'profile')}}" alt="{{notification.fromUser.firstName}}">
+
+ 				<div style="white-space: initial;">
+ 					{{notification.message}}
+				 	<span class="item-note">
+					  <span am-time-ago="notification.createdAt"></span>
+					</span>
+				</div>
+ 			</a>
+ 			<a ng-switch-default ng-show="notification.fromUser" class="item item-avatar" style="padding-left: 68px;" href="#/app/profile/{{notification.fromUser.id}}">
+ 				<img ng-src="{{ImageService.getImageByType(notification.fromUser.profileImage, 'profile')}}" alt="{{notification.fromUser.firstName}}">
+
+ 				<div style="white-space: initial;">
+ 					{{notification.message}}
+				 	<span class="item-note">
+					  <span am-time-ago="notification.createdAt"></span>
+					</span>
+				</div>
+ 			</a>
+ 			<a ng-hide="notification.fromUser" ng-class="{{notification.read === 0 ? 'unread': 'read'}}"  class="item">
+ 				<div style="white-space: initial;">
+ 					{{notification.message}}
+				 	<span class="item-note">
+					  <span am-time-ago="notification.createdAt"></span>
+					</span>
+				</div>
+ 			</a>
+		</ion-item>
+		
+		<div class="card" ng-show="!notifications || notifications.length === 0">
+        	<div class="item">No notifications yet.</div>
+      	</div>
+
+      	<ion-item ng-show="!showingAll" ng-click="showAllNotifications()"> Show all</ion-item>
+      	<ion-item ng-show="showingAll" ng-click="getNotifications()"> Show less</ion-item>
+	</ion-list> 	
+ </ion-content>
+</ion-view>

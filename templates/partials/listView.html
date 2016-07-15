@@ -1,0 +1,65 @@
+<!-- This is shared at several places, Edit this file only if you know what you are doing !! -->
+
+<ion-list class="list-view">
+<div class="card card-item button button-outline load-status" ng-hide="listings.length > 0">
+  {{loadStatus || 'Loading'}}
+</div>
+<ion-item class="row listing-container" ng-repeat="listing in listings">
+  <div class="col item card-item">
+    <a class="listing-item" href="#/app/listing/{{listing.id}}">
+      <!-- <img class="listing-img" ng-src="{{ImageService.getImageByType(listing.images && listing.images.length > 0 ? listing.images[0].imageKey : '','listing-wide', listing.images[0].type)}}" width="100%" /> -->
+      <ion-slide-box style="z-index: 0" delegate-handle="{{listing.id}}"  ng-if="listing.images.length > 0">
+        <ion-slide style="background-color: #000" ng-repeat="image in listing.images track by $index" >
+          <img data-img="{{ImageService.getImageByType(image.imageKey,'listing-wide', image.type)}}" ng-src="{{ImageService.getImageByType(image.imageKey, image.type === 'video' ? 'listing-wide-video' : (listing.endDate | amDifference : null : 'days')< 0 ? 'listing-wide-sold': 'listing-wide', image.type)}}" alt="image-$index" class="slider-img" width="100%" />
+        </ion-slide>
+      </ion-slide-box>
+      <ion-slide-box style="z-index: 0" delegate-handle="{{listing.id}}"  ng-if="listing.images.length === 0">
+        <ion-slide style="background-color: #000" >
+          <img data-img="{{ImageService.getImageByType('','listing-wide', image.type)}}" ng-src="{{ImageService.getImageByType('','listing-wide', image.type)}}" class="slider-img" width="100%" />
+        </ion-slide>
+      </ion-slide-box>
+      <div class="price-tag">
+        <span class="price">{{::listing.price || listing.startPrice | priceFormat : $ : 2}}</span>
+      </div>
+      <div class="favorites-container">
+        <favorites type="listing" listid="{{listing.id}}"
+        favid="{{ (favoriteList | filter: {favorites_listing_id: listing.id })[0].id }}"/>
+      </div>
+      <div class="listing-list-info">
+        <span class="img-container">
+          <span ui-sref="app.profile({userId: listing.user.id})">
+            <img ng-hide="currentUser.facebookId > 0" ng-src="{{ImageService.getImageByType(listing.user.profileImage, 'profile-small')}}" alt="" />
+            <!-- <img class="fb-profile-img" ng-show="currentUser.facebookId > 0" ng-src="{{listing.user.profileImage}}" alt="" /> -->
+          </span>
+        </span>
+        <div>{{::listing.name}}</div>            
+        <div style="font-size: 12px">
+          <span ng-if="listing.startDate">
+            <span ng-show="{{listing.endDate | amDifference : null : 'days'}} < 0"> Sold </span>
+            <span ng-hide="{{listing.endDate | amDifference : null : 'days'}} < 0">{{::listing.endDate | amDifference : null : 'days'}} days left </span>
+          </span>
+          <span ng-if="!listing.startDate">
+            {{::listing.createdAt | date: 'MMM d, y'}}
+          </span>
+
+          <span class="media-available">
+            <span ng-if="(listing.images | filter: {type: 'image'}).length > 0"><i class="ion-camera"></i>
+               {{(listing.images | filter: {type: 'image'}).length}} 
+            </span>
+            <span ng-if="(listing.images | filter: {type: 'video'}).length > 0"><i class="ion-ios-videocam"></i>
+               {{(listing.images | filter: {type: 'video'}).length}} 
+            </span>
+          </span>
+        </div>
+        <span class="listing-miles">{{::listings[$index].distance || 0 | number:1}} mi</span>
+      </div>
+
+    </a>
+  </div>
+</ion-item>
+</ion-list>
+<ion-infinite-scroll
+on-infinite="loadMore()"
+distance="30%"
+ng-if="hasMoreData">
+</ion-infinite-scroll>

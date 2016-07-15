@@ -1,0 +1,47 @@
+<ion-slide-box on-slide-changed="slideHasChanged($index)" >
+	<ion-slide style="background-color: #000" ng-repeat="image in images track by $index" >
+	  <img data-img="{{image}}" ng-src="{{image}}" alt="image-$index" class="slider-img" ng-click="showImages($index)"/>
+	</ion-slide>
+	<ion-slide  style="background-color: #000" ng-repeat="video in videos track by $index" >
+	  <img data-img="{{video.img}}" ng-src="{{video.img}}" alt="image-$index" class="slider-img" ng-click="showImages(images.length + $index)"/>
+	</ion-slide>
+ </ion-slide-box>
+<script type="text/ng-template" id="gallery-zoomview.html">
+	<div class="modal image-modal transparent" on-swipe-down="closeModal()">
+		<ion-slide-box on-slide-changed="slideChanged(index)" active-slide="activeSlide">
+			<ion-slide ng-repeat="image in images track by $index">
+			<ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false"
+			  zooming="true" min-zoom="{{zoomMin}}" style="width: 100%; height: 100%"
+			  delegate-handle="scrollHandle{{$index}}" on-scroll="updateSlideStatus(activeSlide)" on-release="updateSlideStatus(activeSlide)">
+
+			  <div class="image" data-url="{{image}}" style="background-image: url( {{image}} )">
+			  	<!-- <i class="ion-trash-a modal-icon delete-image" ng-show="{{isowner}}" ng-click="deleteImage(image, $index)"></i> -->
+				<i class="modal-icon close-image" ng-click="closeModal()">Done</i>
+			  </div>
+				
+			</ion-scroll>
+		  </ion-slide>
+
+		  <ion-slide ng-repeat="video in videos track by $index">
+		  	<ion-scroll direction="xy" scrollbar-x="false" scrollbar-y="false" 
+			   style="width: 100%; height: 100%" delegate-handle="scrollHandle{{images.length + $index}}" on-scroll="updateSlideStatus(activeSlide)" on-release="updateSlideStatus(activeSlide)">
+
+			  	<!-- <i class="ion-trash-a modal-icon delete-image" ng-show="{{isowner}}" ng-click="deleteImage(video, $index)"></i> -->
+			  	<i class=" modal-icon close-image" ng-click="closeModal()">Done</i>
+			  	<!-- <ion-content overflow-scroll="true" style="height: 100%;display: inline-table;">
+					<video style="height: 100%; width: 100%; z-index: 9999" controls="controls" preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
+					<source ng-src="{{video.src}}" type="video/mp4"/>
+					</video>
+				</ion-content> -->
+				<div class="video-container">
+					<iframe ng-src="{{video.src}}" style="min-height: 300px; width: 100%; margin-top: 100px;" frameborder="0">
+						<!-- <video style="height: 100%; width: 100%; z-index: 9999" controls="controls" preload="metadata" webkit-playsinline="webkit-playsinline" class="videoPlayer">
+						<source ng-src="{{video.src}}" type="video/mp4"/>
+						</video> -->
+					</iframe>
+				</div>
+			</ion-scroll>
+		  </ion-slide>
+		</ion-slide-box>
+	</div>
+</script>

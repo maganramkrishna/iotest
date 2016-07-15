@@ -1,0 +1,90 @@
+<!-- This is shared at several places, Edit this file only if you know what you are doing !! -->
+
+
+<ion-list class="grid-list">
+<div class="card card-item button button-outline load-status" ng-hide="listings.length > 0">
+  {{loadStatus || 'Loading'}}
+</div>
+<div class="empty-container" ng-show="showEmpty">
+  <h2 class="ion-sad"></h2>
+  <div class="message"> Have something to sell? Start selling here</div>
+  <i ui-sref="app.createListing" class="ion-camera listing-camera"></i>
+</div>
+<ion-item class="row listing-container" ng-repeat="listing in listings track by $index" ng-if="$index%2 === 0">
+<div ng-click="showOptions($event, listings[$index])" class="col col-50 item card-item listing-cell cell-1" ng-if="$index < listings.length">
+  <a class="listing-item" >
+    <img class="listing-img" onload="this.style.opacity='1';" ng-src="{{ImageService.getImageByType(listings[$index].images && listings[$index].images.length > 0 ? listings[$index].images[0].imageKey : '','listing', listings[$index].images[0].type)}}" width="100%" />
+
+      <div class="price-tag">
+        <span class="price">{{listings[$index].price || listings[$index].startPrice | priceFormat : $ : 2}}</span>
+      </div>
+  </a>
+  <div class="listing-min-info">
+    <div class="row">
+      <div class="col listing-title">
+        {{listings[$index].name}}
+      </div>
+    </div>
+  </div>
+  <div class="listing-min-info dark">
+    <div class="row">
+      <div class="col col-50">
+        <span ng-if="listings[$index].startDate">
+          <!-- <i class="ion ion-ios-time"></i> {{listings[$index].createdAt | date: 'MMM d, y'}} -->
+          <!-- <span countdown message="Sold out" date="{{listings[$index].endDate}}"></span> -->
+          
+          <span ng-show="{{listings[$index].endDate | amDifference : null : 'days'}} < 0"> Sold </span>
+          <span ng-hide="{{listings[$index].endDate | amDifference : null : 'days'}} < 0">{{listings[$index].endDate | amDifference : null : 'days'}} days left </span>
+        </span>
+        <span ng-if="!listings[$index].startDate">
+          {{listings[$index].createdAt | date: 'MMM d, y'}}
+        </span>
+      </div>
+      <div class="col">
+        <favorites type="listing" listid="{{listings[$index].id}}"
+        favid="{{ (favoriteList | filter: {favorites_listing_id: listings[$index].id })[0].id }}"/>
+      </div>
+    </div>
+  </div>
+</div>
+<div ng-click="showOptions($event, listings[$index + 1])" class="col col-50 item card-item listing-cell cell-2 product-tile" ng-if="$index + 1 < listings.length">
+  <a class="listing-item">
+    <img class="listing-img" onload="this.style.opacity='1';" ng-src="{{ImageService.getImageByType(listings[$index + 1].images && listings[$index + 1].images.length > 0 ? listings[$index + 1].images[0].imageKey : '','listing', listings[$index + 1].images[0].type)}}" width="100%" />
+
+    <div class="price-tag">
+      <span class="price">{{listings[$index + 1].price || listings[$index + 1].startPrice  | priceFormat : $ : 2}}</span>
+    </div>
+  </a>
+  <div class="listing-min-info">
+    <div class="row">
+      <div class="col listing-title">
+        {{listings[$index + 1].name}}
+      </div>
+    </div>
+  </div>
+  <div class="listing-min-info dark">
+    <div class="row">
+      <div class="col col-50">
+        <span ng-if="listings[$index+1].startDate">
+          <!-- <span countdown message="Sold out" date="{{listings[$index + 1].endDate}}"></span> -->
+          <span ng-show="{{listings[$index + 1].endDate | amDifference : null : 'days'}} < 0"> Sold </span>
+          <span ng-hide="{{listings[$index + 1].endDate | amDifference : null : 'days'}} < 0">{{listings[$index + 1].endDate | amDifference : null : 'days'}} days left</span>
+        </span>
+        <span ng-if="!listings[$index+1].startDate">
+          {{listings[$index + 1].createdAt | date: 'MMM d, y'}}
+        </span>
+      </div>
+      <div class="col">
+        <favorites type="'listing'" listid="{{listings[$index + 1].id}}"
+        favid="{{ (favoriteList | filter: {favorites_listing_id: listings[$index + 1].id })[0].id }}"/>
+      </div>
+    </div>
+  </div>
+</div>
+</ion-item>
+</ion-list>
+<ion-infinite-scroll
+on-infinite="loadMore()"
+distance="30%"
+ng-if="hasMoreData">
+</ion-infinite-scroll>

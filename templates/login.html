@@ -1,0 +1,57 @@
+<ion-view hide-nav-bar="false" title="Sign In">
+  <ion-content class="login bg-light">
+    <form ng-submit="doLogin(loginForm)" novalidate="true" name="loginForm" class="login-form">
+        <img src="https://res.cloudinary.com/hotspot-online/image/upload/v1443903623/assets/logo-color.png" alt="Hot Spot" class="login-logo" />
+        <div class="list" style="margin-top: 50px;">
+            <!-- Username -->
+
+            <div class="error-container" ng-show="loginForm.username.$error && loginForm.$submitted" ng-messages="loginForm.username.$error">
+                <div ng-messages="loginForm.username.$error">
+                    <div class="error" ng-message="required">
+                      Username is required!
+                    </div>
+                    <div class="error" ng-message="minlength">
+                      Minimum length of this field is 4 characters!
+                    </div>
+                    <div class="error" ng-message="maxlength">
+                      Maximum length of this field is 20 characters!
+                    </div>
+                </div>
+            </div>
+            <div class="round-input">
+              <span class="ion-person"></span>
+              <input type="text" ng-class="{ 'has-errors' : registerForm.username.$invalid && registerForm.$submitted, 'no-errors' : registerForm.username.$valid}" placeholder="User Name" ng-model="loginData.username" highlight-color="energized" ng-minlength="4" ng-maxlength="20" ng-required="true" type="text" name="username"/>
+            </div>
+
+            <!-- Password -->
+
+            <div class="error-container" ng-show="loginForm.password.$error && loginForm.$submitted" ng-messages="loginForm.password.$error">
+                <div ng-messages="loginForm.password.$error">
+                    <div class="error" ng-message="required">
+                      Password is required!
+                    </div>
+                    <div class="error" ng-message="minlength">
+                      Minimum length of this field is 8 characters!
+                    </div>
+                    <div class="error" ng-message="maxlength">
+                      Maximum length of this field is 20 characters!
+                    </div>
+                </div>
+            </div>
+            <div class="round-input">
+              <span class="ion-locked"></span>
+              <input type="password" placeholder="Password" ng-class="{ 'has-errors' : registerForm.password.$invalid && registerForm.$submitted, 'no-errors' : registerForm.password.$valid}" ng-model="loginData.password" ng-minlength="8" ng-maxlength="20" ng-required="true" type="password" name="password"/>
+              
+            </div>
+            <label class="">
+              <button class="button button-block button-stable" type="submit">SIGN IN</button><br>
+            </label>
+
+            <a ng-click="goToRegister()" class="anchor-light anchor-small" name="cancel">Don't have an account yet ?</a>
+
+            <a ng-click="goBack()" class="anchor-light" name="cancel" style="color: #898888">Cancel</a>
+
+        </div>
+    </form>
+  </ion-content>
+</ion-view>

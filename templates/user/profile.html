@@ -1,0 +1,38 @@
+<ion-view view-title="{{user.firstName}}" >
+    <ion-content class="profile">
+        <!-- <div class="">
+            <div class="user-profile-img">
+                <img src="{{ImageService.getImageByType(user.profileImage, 'profile-thumb')}}">
+            </div>
+        </div> -->
+        <div class="list profile-list">
+            <div class="row profile-info">
+                <div class="col col-33">
+                    <div class="content profile-container" ng-click="showImageOptions()">
+                        <img ng-hide="user.facebookId" alt="{{user.username}}" ng-src="{{ImageService.getImageByType(user.profileImage, 'profile')}}"/>
+                        <!-- <img class="fb-profile-pic" ng-show="user.facebookId > 0" alt="{{user.username}}" ng-src="{{user.profileImage}}"/> -->
+                    </div>
+                </div>
+                <div class="col" style="margin-top: 20px;">
+                    <h4>{{user.firstName}} {{user.lastName}}</h4>
+                    <!-- <div> <i class="ion-android-mail"></i> {{user.email}}</div> -->
+                    <div> <i class="ion-ios-location"></i> {{user.address && user.address.length > 0 ? user.address[0].city + ', ' + user.address[0].state  : ''}} </div>
+                </div>
+                <span class="listing-spam" ng-click="showConfirmReport()"><i class="ion-flag"></i> Report </span>
+            </div>
+        </div>
+
+        <!-- <ul class="nav tab-nav">
+            <li ng-click="selection='live'" ng-class="{active: selection == 'live'}">Live ({{listings.length}})</li>
+            <li ng-click="selection='sold'" ng-class="{active: selection == 'sold'}">Sold Out</li>
+        </ul> -->
+        <div class="live tab-container" ng-show="selection == 'live'">
+            <div class="user-listing-container listing">
+                <div ng-include src="'templates/partials/gridList.html'"></div>
+            </div>
+        </div>
+        <div class="sold tab-container" ng-show="selection == 'sold'">
+            Coming soon
+        </div>
+    </ion-content>
+</ion-view>

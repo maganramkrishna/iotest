@@ -1,0 +1,45 @@
+<ion-view hide-nav-bar="true">
+  <ion-content class="bg-light landing-logo" overflow-scroll="false">
+    <!-- <img src="https://res.cloudinary.com/hotspot-online/image/upload/v1443903623/assets/logo-color.png" alt="Hot Spot"/> -->
+
+    <div class="content">
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" style="opacity: 0.8">
+        <ion-slide>
+          <img ng-src="{{ImageService.getImageByType('/assets/homeslides/splash', 'landing-slides')}}"/>
+        </ion-slide>
+        <ion-slide>
+          <img ng-src="{{ImageService.getImageByType('/assets/homeslides/postings', 'landing-slides')}}"/>
+        </ion-slide>
+        <ion-slide>
+          <img ng-src="{{ImageService.getImageByType('/assets/homeslides/menu', 'landing-slides')}}"/>
+        </ion-slide>
+        <ion-slide>
+          <img ng-src="{{ImageService.getImageByType('/assets/homeslides/login', 'landing-slides')}}"/>
+        </ion-slide>
+        <ion-slide>
+          <img ng-src="{{ImageService.getImageByType('/assets/homeslides/categories', 'landing-slides')}}"/>
+        </ion-slide>
+      </ion-slide-box>
+    </div>
+  </ion-content>
+  <div class="fixed-bottom">
+	  <div class="row">
+		  <div class="col">
+			  <button class="button button-block button-positive icon ion-social-facebook" ng-click="facebookLogin()"> Login with Facebook</button>
+		  </div>
+	  </div>
+	  <div class="row second-row">
+		  <div class="col">
+			<a ui-sref="app.login">
+				<button class="button button-block button-balanced"> Login</button>
+			</a>
+		  </div>
+		  <div class="col">
+			<a ui-sref="app.register">
+			  <button class="button button-block button-positive"> Sign Up</button>
+	  		</a>
+		  </div>
+	  </div>
+  </div>
+  <a class="skipper" ng-click="goBack()">X</a>
+</ion-view>

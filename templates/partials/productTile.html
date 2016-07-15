@@ -1,0 +1,12 @@
+<div>
+	<a class="listing-item" href="#/app/listing/{{listings[$index].id}}">
+		<img class="listing-img" ng-src="{{ImageService.getImageByType(listings[$index].images && listings[$index].images.length > 0 ? listings[$index].images[0].imageKey : '','listing')}}" width="100%" />
+	</a>
+	<div class="listing-min-info">
+		<h4 class="title">{{listings[$index].name}}</h4>
+		<span class="price">{{listings[$index].price || listings[$index].startPrice | currency : $ : 2}}</span>
+		<span class="listing-miles">2.5 mi</span>
+		<favorites type="listing" listid="{{listings[$index].id}}"
+		favid="{{ (favoriteList | filter: {favorites_listing_id: listings[$index].id })[0].id }}"/>
+	</div>å
+</div>

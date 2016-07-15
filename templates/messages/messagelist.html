@@ -1,0 +1,94 @@
+<ion-view view-title="hotspot chats ">
+  <ion-content class="message">
+  	<ul class="nav tab-nav">	  
+	  <li ng-click="changeTab('buying')" ng-class="{active: selection == 'buying'}"> <i class="ion-ios-cart"></i> Buying</li>
+	  <li ng-click="changeTab('selling')" ng-class="{active: selection == 'selling'}"> <i class="ion-arrow-graph-up-right"></i> Selling</li>
+	  <li ng-click="changeTab('private')" ng-class="{active: selection == 'private'}"><div class="sold-badge">Sold</div></li>
+	</ul>
+  	<ion-list ng-show="selection === 'buying'">
+  		<div class="help-text">Your comments on the listings. These chats can be seen by others</div>
+		<ion-item ng-repeat="message in messageList | filter: filterParents" class="list animate-fade-slide-in-right">
+			<a href="#/app/messageThread/{{message.id}}" class="item item-avatar waves-effect waves-button waves-dark in done" style="transition-delay: 0.51s; min-height: 100px;">
+		        <img style="max-width: 65px; max-height: 65px; margin-right: 5px;" 
+		        ng-src="{{ImageService.getImageByType(message.listing.listingimages && message.listing.listingimages.length > 0 ? message.listing.listingimages[0].imageKey : '', 'listing')}}">
+				<div>
+			        <h2>
+			        	<span ui-sref="app.listing({listingId: message.listing.id})">{{message.listing.name}}</span>
+		        	</h2>
+			        <div ng-show="{{(messageList | filter:{parentId: message.id})[0].message.length > 0 }}">
+				        <i class="icon ion-chatbubble"> {{(messageList | filter:{parentId: message.id})[0].message }}</i> <br>
+				         
+		              <small><b>{{(messageList | filter:{parentId: message.id})[0].createdAt | date : 'medium' }}</b></small>
+	              	</div>
+	              	<div ng-show="{{!(messageList | filter:{parentId: message.id})[0].message.length > 0 }}">
+				        <h4 class="icon ion-chatbubble"> {{message.message}}</h4> 
+				        <i class="ion-clock"></i>
+		              <small><b>{{(message.createdAt | date : 'medium') }}</b></small>
+	              	</div>
+	              	<i class="icon ion-chevron-right"></i>
+              	</div>
+		    </a>
+		</ion-item>
+		<div class="card" ng-show="messageList.length === 0"> 
+			<div class="item">{{messageListLabel}}</div>
+		</div>
+	</ion-list>
+	<ion-list ng-show="selection === 'selling'">
+		<div class="help-text">Others comments on your listings. These chats can be seen by others</div>
+		<ion-item ng-repeat="message in messageListingList | filter:  filterParents" class="list animate-fade-slide-in-right">
+			<a href="#/app/messageThread/{{message.id}}" class="item item-avatar waves-effect waves-button waves-dark in done" style="transition-delay: 0.51s; min-height: 100px;">
+		        <img style="max-width: 65px; max-height: 65px; margin-right: 5px;" 
+		        ng-src="{{ImageService.getImageByType(message.listing.images && message.listing.images.length > 0 ? message.listing.images[0].imageKey : '', 'listing')}}">
+				
+				<div>
+			        <h2>
+			        	<span ui-sref="app.listing({listingId: message.listing.id})">{{message.listing.name}}</sapn>
+		        	</h2>
+			        <div ng-show="{{(messageListingList | filter:{parentId: message.id})[0].message.length > 0 }}">
+				        <i class="icon ion-chatbubble"> {{(messageListingList | filter:{parentId: message.id})[0].message }}</i> <br>
+				      	<small><b>{{(messageListingList | filter:{parentId: message.id})[0].createdAt | date : 'medium' }}</b></small>
+	              	</div>
+	              	<div ng-show="{{!(messageListingList | filter:{parentId: message.id})[0].message.length > 0 }}">
+				        <h4 class="icon ion-chatbubble"> {{message.message}}</h4> 
+		              	<i class="ion-clock"></i>
+		              <small><b>{{(message.createdAt | date : 'medium') }}</b></small>
+	              	</div>
+	              	<i class="icon ion-chevron-right"></i>
+              	</div>
+		    </a>
+		</ion-item>
+		<div class="card" ng-show="messageListingList.length === 0"> 
+			<div class="item">{{messageListingListLabel}}</div>
+		</div>
+	</ion-list>
+
+	<ion-list ng-show="selection === 'private'">
+		<div class="help-text">Private chats between buyer and the seller</div>
+		<ion-item ng-repeat="message in messagePrivateList | filter: filterParentsPrivate" class="list animate-fade-slide-in-right">
+			<a href="#/app/orderDetails/{{message.order.id}}" class="item item-avatar waves-effect waves-button waves-dark in done" style="transition-delay: 0.51s; min-height: 100px;">
+		        <img style="max-width: 65px; max-height: 65px; margin-right: 5px;" 
+		        ng-src="{{ImageService.getImageByType(message.listing.listingimages && message.listing.listingimages.length > 0 ? message.listing.listingimages[0].imageKey : '', 'listing')}}">
+				
+				<div>
+			        <h2><span ui-sref="app.listing({listingId: message.listing.id})">{{message.listing.name}}</span></h2>
+			        <div ng-show="{{(messagePrivateList | filter:{parentId: message.id})[0].message.length > 0 }}">
+				        <i class="icon ion-chatbubble"> {{(messagePrivateList | filter:{parentId: message.id})[0].message }}</i> <br>
+				         
+		              <small><b>{{(messagePrivateList | filter:{parentId: message.id})[0].createdAt | date : 'medium' }}</b></small>
+	              	</div>
+	              	<div ng-show="{{!(messagePrivateList | filter:{parentId: message.id})[0].message.length > 0 }}">
+				        <h4 class="icon ion-chatbubble"> {{message.message}}</h4> 
+		              	<i class="ion-clock"></i>
+		              <small><b>{{(message.createdAt | date : 'medium') }}</b></small>
+	              	</div>
+	              	<i class="icon ion-chevron-right"></i>
+              	</div>
+		    </a>
+		</ion-item>
+		<div class="card" ng-show="messagePrivateList.length === 0"> 
+			<div class="item">{{messagePrivateListLabel}}</div>
+		</div>
+	</ion-list>
+  </ion-content>
+  <footer-menu></footer-menu>
+</ion-view>

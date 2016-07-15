@@ -1,0 +1,27 @@
+<ion-footer-bar align-title="center" class="bar footer-menu">
+	<!-- <div class="buttons buttons-left header-item">
+		<span class="left-buttons">
+			<button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+			</button>
+		</span>
+	</div> -->
+	<div class="button-bar">
+	  <button class="button button-clear button-bottom-menu" ui-sref="app.listings">
+	  	<img src="http://res.cloudinary.com/hotspot-online/image/upload/w_35/assets/mini-icon-light" ng-hide="$state.includes('app.listings')" class="icon" alt="">
+	  	<img src="http://res.cloudinary.com/hotspot-online/image/upload/w_35/assets/mini-icon" ng-show="$state.includes('app.listings')" class="icon" alt="">
+	  	<span class="footer-btn-text">Browse Post</span>
+  	  </button>
+	  <button ui-sref-active="selected" ui-sref="app.favoritelistings" class="button button-clear ion-android-favorite button-bottom-menu">
+	  	<span class="footer-btn-text">Favorites</span>
+  	  </button>
+	  <button ui-sref-active="selected" ui-sref="app.createListing"class="button button-clear ion-camera button-bottom-menu">
+	  	<span class="footer-btn-text">Create Post</span>
+	  </button>
+	  <button ui-sref-active="selected" ui-sref="app.messages" class="button button-clear ion-chatbox-working button-bottom-menu">
+	  	<span class="footer-btn-text">Chats</span>
+	  </button>
+	  <button ui-sref-active="selected" ui-sref="app.myprofile" class="button button-clear ion-person button-bottom-menu">
+	  	<span class="footer-btn-text">Profile</span>
+	  </button>
+	</div>
+</ion-footer-bar>

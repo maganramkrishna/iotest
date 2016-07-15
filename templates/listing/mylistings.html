@@ -1,0 +1,16 @@
+<ion-view view-title="my hotspot postings" >
+	<ion-nav-buttons side="right">
+      <button class="button button-icon button-clear ion-refresh" ng-click="refresh()"></button>
+    </ion-nav-buttons>
+  	<ion-content class="animate-fade-slide-in listing">
+	  	<ion-refresher
+    pulling-text="Pull to refresh..."
+    on-refresh="refresh()">
+    </ion-refresher>
+		<ul class="nav tab-nav" style="margin-top: 10px">
+	      <li ng-click="loadSection('active')" ng-class="{active: selection == 'active'}">Active</li>
+	      <li ng-click="loadSection('inactive')" ng-class="{active: selection == 'inactive'}">Inactive</li>
+	    </ul> <br>
+	   	<ng-include src="'templates/partials/ownergrid.html'"></ng-include>
+  	</ion-content>
+</ion-view>

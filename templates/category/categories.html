@@ -1,0 +1,33 @@
+<ion-view view-title="Categories">
+<ion-content class="listing">
+<!-- This is shared at several places, Edit this file only if you know what you are doing !! -->
+<ion-list class="grid-list">
+<ion-item class="row listing-container" ng-repeat="category in categories | filter:{isFeatured: true}" ng-if="$index%2 === 0">
+<div class="col col-50 item card-item listing-cell cell-1" ng-if="$index < categories.length">
+	<a class="listing-item" href="#/app/listing/category/{{categories[$index].id}}">
+		<img onload="this.style.opacity='1';" class="listing-img" ng-src="{{ImageService.getImageByType(categories[$index].image, 'category')}}" width="100%" />
+	</a>
+	<div class="listing-min-info">
+		<div class="row">
+			<div class="col listing-title category-title">
+				{{categories[$index].name}}
+			</div>
+		</div>
+	</div>
+</div>
+<div class="col col-50 item card-item listing-cell cell-2 product-tile" ng-if="$index + 1 < categories.length">
+	<a class="listing-item" href="#/app/listing/category/{{categories[$index + 1].id}}">
+		<img onload="this.style.opacity='1';" class="listing-img" ng-src="{{ImageService.getImageByType(categories[$index + 1].image, 'category')}}" width="100%" />
+	</a>
+	<div class="listing-min-info">
+		<div class="row">
+			<div class="col listing-title category-title">
+				{{categories[$index + 1].name}}
+			</div>
+		</div>
+	</div>
+</div>
+</ion-item>
+</ion-list>
+</ion-content>
+</ion-view>

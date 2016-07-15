@@ -1,0 +1,113 @@
+<ion-view view-title="Payments" hide-back-button="true" >
+  <ion-nav-buttons side="right">
+    <button ng-click="toggleDelete()" class="button button-icon button-clear ion-edit"></button>
+  </ion-nav-buttons>
+  <ion-content class="payments-content payments">
+  <ion-item class="item-borderless hide-on-keyboard-open">
+              &nbsp;
+      </ion-item>
+    <ul class="nav tab-nav">
+      <li ng-click="selection='bank'" ng-class="{active: selection == 'bank'}"> <i class="ion-cash"></i> Bank</li>
+      <li ng-click="selection='cc'" ng-class="{active: selection == 'cc'}"> <i class="ion-card"></i> Credit Card</li>
+    </ul>
+    <div class="cc tab-container" ng-show="selection == 'cc'">
+      <div class="cc-card-type theme-color" ng-show="ccForm.ccNumber.$ccType"> <i class="ion-ios-checkmark"></i> {{ccForm.ccNumber.$ccType || 'Unknown'}}</div>
+      <div class="card">
+        <div class="item item-text-wrap">
+          <div class="list">
+              <form name="ccForm" class="form" ng-show="!paymentMethods.ExtCards.data || paymentMethods.ExtCards.data.length === 0">
+                <div class="row">
+                  <div class="col"><label for="card-number">Card Number</label></div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                      <input type="text" ng-class="{formError: ccForm.ccNumber.$valid === false}" class="form-control" id="cardNumber" cc-format cc-number name="ccNumber" ng-model="card.number" placeholder="Credit Card Number">
+                  </div>
+                </div>
+                
+                <div class="row">
+                  <div class="col col-66">
+                    <label for="card-number">Card Expiration</label>
+                  </div>
+                  <div class="col">
+                    <label for="cvc">CVC</label>
+                  </div>    
+                </div>
+                
+                <div class="row" cc-exp>
+                  <div class="col col-33">
+                    <input placeholder="MM" ng-class="{formError: ccForm.ccExpMonth.$valid === false}" type="text" class="form-control" cc-exp-month name="ccExpMonth" ng-model="card.exp_month">
+                  </div>
+                  <div class="col col-33">
+                    <input ng-class="{formError: ccForm.ccExpYear.$valid === false}" placeholder="YY" type="text" id="expYear" class="form-control" cc-exp-year name="ccExpYear" ng-model="card.exp_year">
+                  </div>
+                  <div class="col col-33">
+                    
+                    <input ng-class="{formError: ccForm.ccExpMonth.$valid === false}" type="text" class="form-control" id="cvc" placeholder="CVC" cc-cvc cc-type="ccForm.ccNumber.$ccType" name="ccCvc" ng-model="card.cvc">
+                    
+                  </div>
+                </div>
+              </form>
+              <div ng-show="paymentMethods.ExtCards.data.length > 0">
+                <strong class="center">Cards</strong>
+              </div>
+          </div>
+        </div>
+      </div>
+      
+      <div ng-show="paymentMethods.ExtCards.data && paymentMethods.ExtCards.data.length > 0">
+        <ion-list show-delete="isDeleting" can-swipe="true" can-delete="isDeleting" type="card">
+          <ion-item href="#" ng-repeat="card in paymentMethods.ExtCards.data">
+            <ion-delete-button class="ion-minus-circled" ng-click="deleteCard(card.id)"></ion-delete-button>
+            <div>XXXX-XXXX-XXXX-{{card.last4}} - {{card.brand}} </div>
+            
+          </ion-item>
+        </ion-list>
+      </div>
+      <br>
+      <div class="text-center">
+        <button class="button button-stable" ng-click="saveCard()" >SAVE</button>
+      </div>
+    </div>
+    <div class="bank tab-container" ng-show="selection === 'bank'">
+        <div ng-show="recipient && recipient.ExternalRecipient.active_account">
+            <ion-list show-delete="isDeleting" can-swipe="true" can-delete="isDeleting" type="card">
+              <ion-item>
+                <ion-delete-button class="ion-minus-circled" ng-click="deleteRecipient()"></ion-delete-button>
+                <i class="ion-ios-home"></i> {{recipient.ExternalRecipient.active_account.bank_name}} - XX {{recipient.ExternalRecipient.active_account.last4}}
+              </ion-item>
+            </ion-list>
+        </div>
+        <div class="card" ng-hide="recipient && recipient.ExternalRecipient.active_account">
+            <div class="item item-text-wrap">
+              <div class="list">
+                <form action="">                
+                  <label > Add a Bank</label>
+                  <div class="row">
+                      <div class="list">
+                        <label class="item item-input">
+                          <input type="text" ng-model="bank.routing_number" placeholder="Routing Number">
+                        </label>
+                        <label class="item item-input">
+                          <input type="text" ng-model="bank.account_number" placeholder="Account Number">
+                        </label>
+                        <label class="item item-input">
+                          <input type="text" ng-model="bank.account_holder_name" placeholder="Full Legal Name">
+                        </label>
+                        <label class="item item-input">
+                          <input type="text" ng-model="bank.tax_id" placeholder="Tax ID / SSN">
+                        </label>
+                        <small>Tax id/SSN recommended for faster payment but not mandatory to receive payments.</small>
+                      </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+
+        <div class="text-center" ng-hide="recipient && recipient.ExternalRecipient.active_account">
+          <button class="button button-stable" ng-click="saveBank()" >SAVE</button>
+        </div>
+    </div>
+  </ion-content>
+</ion-view>

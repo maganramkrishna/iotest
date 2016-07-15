@@ -1,0 +1,229 @@
+<ion-view view-title="{{ listing.name ? 'Update ' + listing.name : 'Create a posting'}}">
+<ion-content class="create-listing">
+<div class="card images" ng-class="{'completed': listingImages.length > 0 }">
+  <div class="item item-text-wrap">
+    <div class="row">
+      <div class="col col-50">
+        <i class="ion-camera" ng-click="showImageOptions()"> Add Image</i>
+      </div>
+      <div class="col col-50">
+        <i class="ion-ios-videocam" ng-click="captureVideo()"> Add Video</i>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card" ng-class="{'completed': listingImages.length > 0 }">
+  <div class="item item-text-wrap">
+    <small class="pull-right" ng-click="clearImages()">clear</small>
+    <div class="row">
+     <!--  <div class="item-default help-text" ng-if="listingImages.length === 0">
+        Please add images
+      </div> -->
+      <div class="row listing-images-container">
+        <div class="col">
+            <span class="ion-ios-close remove-img" ng-click="removeImg(0)" ng-if="listingImages[0]"></span>
+          <!-- <img ng-src="{{ImageService.getImageByType(image, 'listing')}}" alt=""> -->
+            <div class="img-thumb-container" ng-click="showImageOptions()" ng-class="{'ion-camera': !listingImages[0]}">
+              <!-- <img ng-src="{{ImageService.getImageByType(listingImages[0], 'listing')}}" alt=""> -->
+              <img src="{{listingImages[0]}}" ng-if="listingImages[0]" alt="">
+            </div>
+        </div>
+        <div class="col">
+          <span class="ion-ios-close remove-img" ng-click="removeImg(1)" ng-if="listingImages[1]"></span>
+          <div class="img-thumb-container" ng-click="showImageOptions()" ng-class="{'ion-camera': !listingImages[1]}">
+            <!-- <img ng-src="{{ImageService.getImageByType(listingImages[1], 'listing')}}" alt=""> -->
+            <img ng-src="{{listingImages[1]}}" ng-if="listingImages[1]" alt="">
+          </div>
+        </div>
+        <div class="col">
+          <span class="ion-ios-close remove-img" ng-click="removeImg(2)" ng-if="listingImages[2]"></span>
+          <div class="img-thumb-container" ng-click="showImageOptions()" ng-class="{'ion-camera': !listingImages[2]}">
+            <!-- <img ng-src="{{ImageService.getImageByType(listingImages[2], 'listing')}}" alt=""> -->
+            <img ng-src="{{listingImages[2]}}" ng-if="listingImages[2]" alt="">
+          </div>
+        </div>
+        <div class="col">
+          <span class="ion-ios-close remove-img" ng-click="removeImg(3)" ng-if="listingImages[3]"></span>
+          <div class="img-thumb-container" ng-click="showImageOptions()" ng-class="{'ion-camera': !listingImages[3]}">
+            <!-- <img ng-src="{{ImageService.getImageByType(listingImages[3], 'listing')}}" alt=""> -->
+            <img ng-src="{{listingImages[3]}}" ng-if="listingImages[3]" alt="">
+          </div>
+        </div>
+        <div class="col">
+          <span class="ion-ios-close remove-img" ng-click="removeVideo(0)" ng-if="listingVideos[0]"></span>
+          <div class="img-thumb-container" ng-click="captureVideo()" ng-class="{'ion-ios-videocam': !listingVideos[0]}">
+            <!-- <img ng-src="{{ImageService.getImageByType(listingImages[4], 'listing')}}" alt=""> -->
+            <!-- <img ng-src="{{listingVideos[0]}}" alt=""> -->
+            <span ng-show="listingVideos[0]" ng-if="listingVideos[0]" class="ion-checkmark"></span>
+          </div>
+        </div>
+        <div class="col">
+          <span class="ion-ios-close remove-img" ng-click="removeVideo(1)" ng-if="listingVideos[1]"></span>
+          <div class="img-thumb-container" ng-click="captureVideo()" ng-class="{'ion-ios-videocam': !listingVideos[1]}">
+            <!-- <img ng-src="{{ImageService.getImageByType(listingImages[5], 'listing')}}" alt=""> -->
+            <!-- <img ng-src="{{listingVideos[1]}}" alt=""> -->
+            <span ng-show="listingVideos[1]" ng-if="listingVideos[1]" class="ion-checkmark"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card" ng-class="{'completed': listing.name }">
+  <div class="item item-text-wrap">
+    <ion-list>
+    <ion-item class="item-default"
+    ng-click="toggleGroup('title')"
+    ng-class="{active: isGroupShown('title')}">
+    <i class="icon" ng-class="isGroupShown('title') ? 'ion-minus' : 'ion-plus'"></i>
+    &nbsp;
+    Add Title <span class="preview">{{listing.name}}</span>
+    </ion-item>
+    <ion-item class="item-accordion"
+    ng-show="isGroupShown('title')">
+    <input type="text" name="name" ng-model="listing.name" maxlength="50" required placeholder="What are you listing ?">
+    </ion-item>
+    </ion-list>
+  </div>
+</div>
+<div class="card" ng-class="{'completed': listing.condition_id }">
+  <div class="item item-text-wrap">
+    <ion-list>
+    <ion-item class="item-default"
+    ng-click="toggleGroup('condition')"
+    ng-class="{active: isGroupShown('condition')}">
+    <i class="icon ion-ios-settings-strong"></i>
+    &nbsp;
+    Condition <span class="preview">{{listing.condition_id == 1 ? 'New' : 'Used'}}</span>
+    <i class="icon pull-right" ng-class="isGroupShown('condition') ? 'ion-chevron-up': 'ion-chevron-down'"></i>
+    </ion-item>
+    <ion-item class="item-accordion light-bg" ng-show="isGroupShown('condition')">
+      <ion-radio ng-model="listing.condition_id" ng-value="'1'">New</ion-radio>
+      <ion-radio ng-model="listing.condition_id" ng-value="'2'">Used</ion-radio>
+    </ion-item>
+    </ion-list>
+  </div>
+</div>
+<div class="card" ng-class="{'completed': listing.description }">
+  <div class="item item-text-wrap">
+    <ion-list>
+    <ion-item class="item-default"
+    ng-click="toggleGroup('description')"
+    ng-class="{active: isGroupShown('description')}">
+    <i class="icon ion-ios-compose"></i>
+    &nbsp;
+    Description <span class="preview">{{listing.description}}</span>
+    <i class="icon pull-right" ng-class="isGroupShown('description') ? 'ion-chevron-up': 'ion-chevron-down'"></i>
+    </ion-item>
+    <ion-item class="item-accordion light-bg"
+    ng-show="isGroupShown('description')">
+    <textarea type="text" class="light-bg" name="description" placeholder="Describe what you are trying to sell .." rows="5" ng-model="listing.description" maxlength="500" required></textarea>
+    </ion-item>
+    </ion-list>
+  </div>
+</div>
+<div class="card" ng-class="{'completed': selectedCategory }">
+  <div class="item item-text-wrap">
+    <ion-list>
+    <ion-item class="item-default" ng-click="openCategoryModal()">
+    <i class="icon ion-filing"></i>
+    &nbsp;
+    Select Category <span class="preview">{{selectedCategory}}</span>
+    <i class="icon pull-right ion-chevron-right"></i>
+    </ion-item>
+    </ion-list>
+  </div>
+</div>
+<div class="card" ng-class="{'completed': listing.price }">
+  <div class="item item-text-wrap item-terms">
+    <ion-list>
+    <ion-item class="item-default"
+    ng-click="toggleGroup('terms')"
+    ng-class="{active: isGroupShown('terms')}">
+    <i class="icon ion-ios-compose"></i>
+    &nbsp;
+    Price It <span class="preview">{{ listing.price | currency:$:2}}</span>
+    <i class="icon pull-right" ng-class="isGroupShown('terms') ? 'ion-chevron-up': 'ion-chevron-down'"></i>
+    </ion-item>
+      <ion-item class="item-accordion light-bg" ng-show="isGroupShown('terms')">
+        <div class="item-terms-container" ng-hide="!bidders || bidders.length === 0">
+            People have bidded on this item. You cannot change the price for this item.
+        </div>
+        <div class="item-terms-container" ng-show="!bidders || bidders.length === 0">
+          <ul class="listing-type-list">
+            <li><i class="{{isBuyNow == true ? 'selected ion-ios-checkmark' : 'ion-ios-checkmark-outline '}}" ng-click="toggleTo(true)"> Buy Now</i></li>
+            <li><i class="{{!isBuyNow ? 'selected ion-ios-checkmark' : 'ion-ios-checkmark-outline '}}" ng-click="toggleTo(false)"> Auction</i></li>
+          </ul>
+          <hr>
+          <label for="price">
+            <i class="ion-pricetag"></i> Price $  <br><br>
+            <input type="number" ng-model="listing.price" name="price" class="input-price">  
+          </label>
+          <br>
+          <div ng-if="isBuyNow">
+          </div>
+          <div ng-if="!isBuyNow">
+            <i>Select start and end date for an auction</i>
+            <div ng-click="selectStartDate()" ng-model="listing.startDate">
+              Start: <span ng-hide="listing.startDate" class="help-text" style="color: #b30212">Click here to add start date</span>
+              {{listing.startDate| date: "MMM d, y h:mm:ss a"}}
+            </div>
+            <br>
+            <div ng-click="selectEndDate()" ng-model="listing.endDate">
+              End: <span ng-hide="listing.endDate" class="help-text" style="color: #b30212">Click here to add end date</span>
+              {{listing.endDate| date: "MMM d, y h:mm:ss a"}}
+            </div>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+</div>
+<div class="card" ng-class="{'completed': listing.keywords}">
+  <div class="item item-text-wrap">
+    <ion-list>
+    <ion-item class="item-default"
+    ng-click="toggleGroup('keywords')"
+    ng-class="{active: isGroupShown('keywords')}">
+    <i class="icon ion-drag"></i>
+    &nbsp;
+    Item Keywords <span class="preview">{{listing.keywords}}</span>
+    <i class="icon pull-right" ng-class="isGroupShown('keywords') ? 'ion-chevron-up': 'ion-chevron-down'"></i>
+    </ion-item>
+    <ion-item class="item-accordion light-bg"
+    ng-show="isGroupShown('keywords')">
+    <textarea type="text" class="light-bg" name="keywords" placeholder="Enter comma separated keywords for your listing" rows="5" ng-model="listing.keywords" maxlength="200" required></textarea>
+    </ion-item>
+    </ion-list>
+  </div>
+</div>
+<div class="row" style="margin-right: 10px;">
+  <div class="col col-100">
+    <div class="pull-left circle-container-small"><i class="ion-ios-eye"> </i></div> 
+    <span class="listing-preview" ng-click="showPreview()">Preview</span>
+    <span class="listing-location-view">{{currentUser.address && currentUser.address.length > 0 ? currentUser.address[0].city + ', ' + currentUser.address[0].state  : ''}} </span><div class="pull-right circle-container-small"><i class="ion-ios-location"></i></div>
+  </div>
+  </div>
+  <div class="row">
+    <div class="col col-100">
+      <button class="button button-full button-stable" ng-click="createListing()">POST IT</button>
+    </div>
+  </div>
+</div>
+<script id="categories.html" type="text/ng-template">
+  <ion-modal-view>
+    <ion-header-bar class="stable">
+      <h1 class="title">Select a category</h1>
+      <button class="button button-clear button-positive right" ng-click="closeCategoryModal()">Close</button>
+    </ion-header-bar>
+    <ion-content>
+      <ion-list>
+        <ion-item ng-click="selectCategory(category.id, category.name)" ng-repeat="category in categories">
+          {{category.name}}
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-modal-view>
+</script>
+</ion-content>
+</ion-view>

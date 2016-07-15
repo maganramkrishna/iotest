@@ -1,0 +1,66 @@
+
+  <ion-content class="listing">
+      <div class="image-gallery">
+          <image-slider images="listingImages" isowner="isOwner" delete-fn="deleteImage(name, index)"></image-slider>
+
+          <div class="listing-control-badge">
+              <favorites favid="{{isFavorite ? listingFavorite.id : ''}}" listid="{{listing.id}}" />
+          </div>
+      </div>
+      <div class="list bar-bg-2">
+        <div class="row">
+          <div class="col">
+            <div class="circle-container-small"><i class="ion-ios-location"></i></div> California
+          </div>
+          <div class="col" ng-if="listing.startDate"><span countdown date="{{listing.endDate}}"></span></div>
+          <div class="col">
+            <span class="ion-chatbox pull-right" ui-sref="app.messages"> Chat</span>
+          </div>
+        </div>
+      </div>
+      <div class="listing-info-container">
+        <div class="list listing-owner">
+          Sold by: <span ui-sref="app.profile({userId: listing.user.id})" class="theme-color">{{listing.user.firstName}} {{listing.user.lastName}}</span>, <small>Since {{listing.user.createdAt | date: 'MMM d, y'}}</small>  
+        </div>
+
+        <div class="card">
+          <div class="item item-text-wrap listing-info">
+            <div class="title">
+              <strong>Item Title: </strong> <span class="theme-color">{{listing.name}}</span>
+            </div>
+            <div class="condition">
+              <strong>Item Condition: </strong> <span class="theme-color">{{listing.name}}</span>
+            </div>
+            <div class="posted-date">
+                <strong> Item posted on: </strong>
+                <span>{{listing.createdAt | date: 'medium'}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="item-text-wrap">
+            <ion-list>
+            <ion-item class="item-default"
+            ng-click="toggleGroup('description')"
+            ng-class="{active: isGroupShown('description')}">
+            <i class="icon ion-ios-compose"></i>
+            &nbsp;
+            Description
+            <i class="icon pull-right" ng-class="isGroupShown('description') ? 'ion-chevron-up': 'ion-chevron-down'"></i>
+            </ion-item>
+            <ion-item class="item-accordion light-bg"
+            ng-show="isGroupShown('description')">
+            <div class="description">
+              {{listing.description}}
+            </div>
+            </ion-item>
+            </ion-list>
+          </div>
+        </div>
+        <div class="list center purchase-controls">
+          <div class="purchase-price" ng-hide="listing.endDate" ><strong> Current Price {{listing.price | currency : $ : 2}}</strong></div>
+          <div class="purchase-price" ng-show="listing.endDate" ><strong> Current Bid {{maxBid | currency : $ : 2}}</strong></div>
+        </div>
+      </div>
+</ion-content>
